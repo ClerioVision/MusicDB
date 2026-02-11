@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ClerioVision.MusicDB": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}

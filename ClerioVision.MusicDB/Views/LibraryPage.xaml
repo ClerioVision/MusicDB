@@ -1,0 +1,89 @@
+<Page
+    x:Class="ClerioVision.MusicDB.Views.LibraryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <ScrollViewer>
+        <StackPanel Padding="24" Spacing="16">
+            <!-- Page Title -->
+            <TextBlock Text="Music Library" Style="{StaticResource PageTitleTextStyle}"/>
+
+            <!-- Library Stats -->
+            <Grid Style="{StaticResource CardStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Spacing="4">
+                    <TextBlock Text="Artists" FontSize="14" Opacity="0.7"/>
+                    <TextBlock Text="{x:Bind ViewModel.TotalArtists, Mode=OneWay}" 
+                               FontSize="32" FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Spacing="4">
+                    <TextBlock Text="Albums" FontSize="14" Opacity="0.7"/>
+                    <TextBlock Text="{x:Bind ViewModel.TotalAlbums, Mode=OneWay}" 
+                               FontSize="32" FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Spacing="4">
+                    <TextBlock Text="Tracks" FontSize="14" Opacity="0.7"/>
+                    <TextBlock Text="{x:Bind ViewModel.TotalTracks, Mode=OneWay}" 
+                               FontSize="32" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- Scan Section -->
+            <TextBlock Text="Scan Music Folder" Style="{StaticResource SectionHeaderTextStyle}"/>
+            
+            <Grid Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="12">
+                    <!-- Folder Selection -->
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="Selected Folder:" FontWeight="SemiBold"/>
+                        <TextBlock Text="{x:Bind ViewModel.SelectedFolder, Mode=OneWay}" 
+                                   TextWrapping="Wrap"
+                                   Opacity="0.7"/>
+                        <Button Content="Select Folder" 
+                                Command="{x:Bind ViewModel.SelectFolderCommand}"
+                                IsEnabled="{x:Bind ViewModel.IsScanning, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"/>
+                    </StackPanel>
+
+                    <!-- Scan Progress -->
+                    <StackPanel Spacing="8" Visibility="{x:Bind ViewModel.IsScanning, Mode=OneWay}">
+                        <TextBlock Text="{x:Bind ViewModel.ScanStatus, Mode=OneWay}"/>
+                        <ProgressBar Value="{x:Bind ViewModel.ScanProgress, Mode=OneWay}" 
+                                     Maximum="100"
+                                     IsIndeterminate="False"/>
+                    </StackPanel>
+
+                    <!-- Status Message -->
+                    <TextBlock Text="{x:Bind ViewModel.ScanStatus, Mode=OneWay}"
+                               Visibility="{x:Bind ViewModel.IsScanning, Mode=OneWay, Converter={StaticResource BoolNegationConverter}}"
+                               Foreground="{ThemeResource SystemAccentColor}"/>
+
+                    <!-- Action Buttons -->
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="Start Scan" 
+                                Command="{x:Bind ViewModel.StartScanCommand}"
+                                Style="{StaticResource AccentButtonStyle}"/>
+                        <Button Content="Cancel" 
+                                Command="{x:Bind ViewModel.CancelScanCommand}"
+                                Visibility="{x:Bind ViewModel.IsScanning, Mode=OneWay}"/>
+                    </StackPanel>
+
+                    <!-- Error Message -->
+                    <InfoBar IsOpen="{x:Bind ViewModel.ErrorMessage, Mode=OneWay, Converter={StaticResource StringToBoolConverter}}"
+                             Severity="Error"
+                             Title="Error"
+                             Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"/>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
